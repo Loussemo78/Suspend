@@ -3,10 +3,7 @@ package com.example.suspend
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,9 +14,9 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             Log.i("MyTag", "Calculation started.....")
 
-            val stock1 = getStock1()
-            val stock2 = getStock2()
-            val total = stock1+stock2
+            val stock1 = async { getStock1() }
+            val stock2 = async { getStock2() }
+            val total = stock1.await()+stock2.await()
             Log.i("MyTag", "total  is $total")
 
         }
