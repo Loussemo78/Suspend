@@ -3,7 +3,9 @@ package com.example.suspend
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,13 +13,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             Log.i("MyTag", "Calculation started.....")
 
-            val stock1 = async { getStock1() }
-            val stock2 = async { getStock2() }
+            val stock1 = async(IO) { getStock1() }
+            val stock2 = async(IO) { getStock2() }
             val total = stock1.await()+stock2.await()
-            Log.i("MyTag", "total  is $total")
+            Toast.makeText(applicationContext,"total  is $total",Toast.LENGTH_LONG).show()
 
         }
     }
